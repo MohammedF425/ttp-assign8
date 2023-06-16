@@ -14,13 +14,14 @@ Display all zip codes received from the API */ }
         const[zipCode, setZipCode] = useState(11210);
         const [city, setCity] = useState("");
         const [inputValue, setInputValue] = useState("");
-        const [lat, setLat] = useState("");
-        const [lng, setLng] = useState("");
+        const [lat, setLat] = useState(0);
+        const [lng, setLng] = useState(0);
         const [secondZipCode, setSecondZipCode] = useState(11210);
         const [secondCity, setSecondCity] = useState("");
         const [secondInputValue, setSecondInputValue] = useState("");
-        const [secondLat, setSecondLat] = useState("");
-        const [secondLng, setSecondLng] = useState("");
+        const [secondLat, setSecondLat] = useState(0);
+        const [secondLng, setSecondLng] = useState(0);
+        const [distance, setDistance] = useState("")
 
 
 
@@ -30,11 +31,11 @@ Display all zip codes received from the API */ }
                 const area = await axios.get(`https://zip-api.eu/api/v1/info/US-${zipCode}`);
                 const area2 = await axios.get(`https://zip-api.eu/api/v1/info/US-${secondZipCode}`); 
                 setCity(area.data.place_name)
-                setLat(area.data.lat)
-                setLng(area.data.lng)
+                setLat(parseFloat(area.data.lat))
+                setLng(parseFloat(area.data.lng))
                 setSecondCity(area2.data.place_name)
-                setSecondLat(area2.data.lat)
-                setSecondLng(area2.data.lng)
+                setSecondLat(parseFloat(area2.data.lat))
+                setSecondLng(parseFloat(area2.data.lng))
                 return area
             } catch (error) {
                 console.error(error);
@@ -56,8 +57,9 @@ Display all zip codes received from the API */ }
 
         const calculateDistance = () => {
             try {
+                const distance = Math.acos(Math.sin(lat) * Math.sin(secondLat) + Math.cos(lat) * Math.cos(secondLat) * Math.cos(secondLng - lng)) * 6371;
                 // acos(sin(lat1)*sin(lat2)+cos(lat1)*cos(lat2)*cos(lon2-lon1))*6371
-                
+                setDistance(distance);
             } catch (error) {
                 
             }
